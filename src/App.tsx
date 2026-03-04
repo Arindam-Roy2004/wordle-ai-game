@@ -201,14 +201,20 @@ function App() {
     }
   };
 
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px' }}>
-        <h1>Wordle Clone</h1>
-        <h2 style={{ color: timeLeft <= 60 ? '#ff3b30' : 'inherit' }}>
-          {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
-        </h2>
+    <div className="app-container">
+      <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
+        ⏱ {formatTime(timeLeft)}
       </div>
+      <header className="app-header">
+        <h1>Wordle Clone</h1>
+      </header>
 
       <GameBoard
         guesses={guesses}
@@ -221,7 +227,7 @@ function App() {
         onKeyPress={onKeyPress}
       />
 
-      <div className="hint-section" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+      <div className="action-section">
         <button
           className="hint-btn"
           onClick={handleGetHint}
@@ -230,14 +236,13 @@ function App() {
           {isLoadingHint ? 'WAIT...' : 'GET HINT'}
         </button>
         <button
-          className="hint-btn"
+          className="hint-btn new-game-btn"
           onClick={resetGame}
-          style={{ backgroundColor: '#ff3b30' }}
         >
           NEW GAME
         </button>
-        {hint && <p className="hint-text" style={{ width: '100%' }}>{hint}</p>}
       </div>
+      {hint && <p className="hint-text">{hint}</p>}
     </div>
   );
 }

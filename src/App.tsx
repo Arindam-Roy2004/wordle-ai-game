@@ -37,11 +37,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    toastr.options = {
-      positionClass: 'toast-top-center',
-      preventDuplicates: true,
-      timeOut: 3000,
-    };
+    toastr.options.positionClass = 'toast-top-center';
+    toastr.options.preventDuplicates = true;
+    toastr.options.timeOut = 3000;
     resetGame();
   }, [resetGame]);
 

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import * as toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import 'animate.css';
+import './App.css';
 
 import { WORDS } from './utils/words';
 import { GameBoard } from './components/GameBoard';
@@ -209,11 +210,12 @@ function App() {
 
   return (
     <div className="app-container">
-      <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
-        ⏱ {formatTime(timeLeft)}
-      </div>
       <header className="app-header">
         <h1>Wordle Clone</h1>
+        <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
+          <span className="timer-icon">⏱</span>
+          <span>{formatTime(timeLeft)}</span>
+        </div>
       </header>
 
       <GameBoard

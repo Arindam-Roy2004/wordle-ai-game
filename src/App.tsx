@@ -18,12 +18,41 @@ function App() {
   const [hint, setHint] = useState<string>('');
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minute timer
 
-  useEffect(() => {
+  const resetGame = useCallback(() => {
     const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
     setRightGuessString(randomWord);
+    setGuesses(Array(NUMBER_OF_GUESSES).fill([]));
+    setColors(Array(NUMBER_OF_GUESSES).fill([]));
+    setCurrentGuessIndex(0);
+    setKeyboardColors({});
+    setHint('');
+    setIsGameFinished(false);
+    setTimeLeft(300); // Reset timer
     console.log("Answer:", randomWord);
   }, []);
+
+  useEffect(() => {
+    resetGame();
+  }, [resetGame]);
+
+  useEffect(() => {
+    if (isGameFinished) return;
+
+    if (timeLeft <= 0) {
+      setIsGameFinished(true);
+      toastr.error("Time's up! Game over!");
+      toastr.info(`The right word was: "${rightGuessString}"`);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft, isGameFinished, rightGuessString]);
 
   const insertKey = useCallback((key: string) => {
     if (isGameFinished || currentGuessIndex >= NUMBER_OF_GUESSES) return;
@@ -107,7 +136,10 @@ function App() {
     setKeyboardColors(newKeyboardColors);
 
     if (guessString === rightGuessString) {
-      setTimeout(() => toastr.success("You guessed right! Game over!"), 1500);
+      setTimeout(() => {
+        toastr.success("You guessed right!");
+        resetGame();
+      }, 1500);
       setIsGameFinished(true);
       return;
     }
@@ -184,15 +216,22 @@ function App() {
         onKeyPress={onKeyPress}
       />
 
-      <div className="hint-section">
+      <div className="hint-section" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
         <button
           className="hint-btn"
           onClick={handleGetHint}
-          disabled={isLoadingHint}
+          disabled={isLoadingHint || isGameFinished}
         >
           {isLoadingHint ? 'WAIT...' : 'GET HINT'}
         </button>
-        {hint && <p className="hint-text">{hint}</p>}
+        <button
+          className="hint-btn"
+          onClick={resetGame}
+          style={{ backgroundColor: '#ff3b30' }}
+        >
+          NEW GAME
+        </button>
+        {hint && <p className="hint-text" style={{ width: '100%' }}>{hint}</p>}
       </div>
     </div>
   );

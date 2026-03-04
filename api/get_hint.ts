@@ -13,6 +13,10 @@ if (apiKey) {
   });
 }
 
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 5;
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -32,6 +36,29 @@ export default async function handler(
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
+  // Rate limiting logic
+  const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
+  const ipStr = Array.isArray(ip) ? ip[0] : ip;
+  
+  if (ipStr !== 'unknown') {
+    const now = Date.now();
+    const limitInfo = rateLimitMap.get(ipStr);
+
+    if (limitInfo) {
+      if (now > limitInfo.resetTime) {
+        // Reset window
+        rateLimitMap.set(ipStr, { count: 1, resetTime: now + WINDOW_MS });
+      } else {
+        if (limitInfo.count >= MAX_REQUESTS) {
+          return res.status(429).json({ error: 'Too Many Requests, please wait and try again.' });
+        }
+        limitInfo.count += 1;
+      }
+    } else {
+      rateLimitMap.set(ipStr, { count: 1, resetTime: now + WINDOW_MS });
+    }
   }
 
   const { word } = req.body;

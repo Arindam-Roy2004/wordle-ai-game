@@ -17,6 +17,7 @@ function App() {
   const [currentGuessIndex, setCurrentGuessIndex] = useState(0);
   const [keyboardColors, setKeyboardColors] = useState<Record<string, string>>({});
   const [hint, setHint] = useState<string>('');
+  const [hintsLeft, setHintsLeft] = useState(3);
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minute timer
@@ -29,12 +30,18 @@ function App() {
     setCurrentGuessIndex(0);
     setKeyboardColors({});
     setHint('');
+    setHintsLeft(3);
     setIsGameFinished(false);
     setTimeLeft(300); // Reset timer
     console.log("Answer:", randomWord);
   }, []);
 
   useEffect(() => {
+    toastr.options = {
+      positionClass: 'toast-top-center',
+      preventDuplicates: true,
+      timeOut: 3000,
+    };
     resetGame();
   }, [resetGame]);
 
@@ -178,12 +185,11 @@ function App() {
   }, [onKeyPress]);
 
   const handleGetHint = async () => {
-    if (!rightGuessString) return;
+    if (!rightGuessString || hintsLeft <= 0) return;
     setIsLoadingHint(true);
     setHint("Fetching hint...");
 
     try {
-      // In production or via Vite proxy, it calls the Vercel serverless function
       const res = await fetch('/api/get_hint', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -192,6 +198,7 @@ function App() {
       const data = await res.json();
       if (res.ok && data.hint) {
         setHint(data.hint);
+        setHintsLeft(prev => prev - 1);
       } else {
         setHint(`Error: ${data.detail || data.error}`);
       }
@@ -233,9 +240,20 @@ function App() {
         <button
           className="hint-btn"
           onClick={handleGetHint}
-          disabled={isLoadingHint || isGameFinished}
+          disabled={isLoadingHint || isGameFinished || hintsLeft <= 0}
         >
-          {isLoadingHint ? 'WAIT...' : 'GET HINT'}
+          {isLoadingHint ? 'WAIT...' : `GET HINT (${hintsLeft})`}
+        </button>
+        <button
+          className="hint-btn quit-btn"
+          onClick={() => {
+            setIsGameFinished(true);
+            toastr.info(`You quit! The right word was: "${rightGuessString}"`);
+            setHint(`Answer: ${rightGuessString}`);
+          }}
+          disabled={isGameFinished}
+        >
+          QUIT
         </button>
         <button
           className="hint-btn new-game-btn"

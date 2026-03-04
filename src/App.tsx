@@ -93,7 +93,7 @@ function App() {
       return;
     }
 
-    let rightGuessCopy = rightGuessString.split('');
+    const rightGuessCopy = rightGuessString.split('');
     const newColors = Array(5).fill('transparent');
 
     // First pass: mark greens
@@ -153,7 +153,7 @@ function App() {
     } else {
       setCurrentGuessIndex(currentGuessIndex + 1);
     }
-  }, [guesses, colors, currentGuessIndex, rightGuessString, keyboardColors, isGameFinished]);
+  }, [guesses, colors, currentGuessIndex, rightGuessString, keyboardColors, isGameFinished, resetGame]);
 
   const onKeyPress = useCallback((key: string) => {
     if (key === 'Backspace' || key === 'Del') {
@@ -203,7 +203,12 @@ function App() {
 
   return (
     <div>
-      <h1>Wordle Clone</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 20px' }}>
+        <h1>Wordle Clone</h1>
+        <h2 style={{ color: timeLeft <= 60 ? '#ff3b30' : 'inherit' }}>
+          {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+        </h2>
+      </div>
 
       <GameBoard
         guesses={guesses}

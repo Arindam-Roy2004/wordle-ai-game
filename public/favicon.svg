@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- W tile - green (correct) -->
+  <rect x="2" y="2" width="28" height="28" rx="4" fill="#538d4e" stroke="#fff" stroke-width="1.5"/>
+  <text x="16" y="22" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#fff">W</text>
+  <!-- O tile - yellow (present) -->
+  <rect x="35" y="2" width="28" height="28" rx="4" fill="#b59f3b" stroke="#fff" stroke-width="1.5"/>
+  <text x="49" y="22" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#fff">O</text>
+  <!-- R tile - green -->
+  <rect x="68" y="2" width="28" height="28" rx="4" fill="#538d4e" stroke="#fff" stroke-width="1.5"/>
+  <text x="82" y="22" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#fff">R</text>
+  <!-- D tile - grey (absent) -->
+  <rect x="18" y="36" width="28" height="28" rx="4" fill="#3a3a3c" stroke="#fff" stroke-width="1.5"/>
+  <text x="32" y="56" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#fff">D</text>
+  <!-- L tile - green -->
+  <rect x="52" y="36" width="28" height="28" rx="4" fill="#538d4e" stroke="#fff" stroke-width="1.5"/>
+  <text x="66" y="56" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#fff">L</text>
+  <!-- E tile - yellow -->
+  <rect x="35" y="70" width="28" height="28" rx="4" fill="#b59f3b" stroke="#fff" stroke-width="1.5"/>
+  <text x="49" y="90" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="20" font-weight="900" fill="#fff">E</text>
+</svg>

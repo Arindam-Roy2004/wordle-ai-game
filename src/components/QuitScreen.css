@@ -1,0 +1,127 @@
+/* ── Quit / Game-Over Screen ── */
+
+.quit-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1a;
+  gap: 2rem;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* ── GAME OVER title ── */
+.quit-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2rem;
+  color: #538d4e;
+  text-shadow: 2px 2px 0 #000;
+  text-align: center;
+  letter-spacing: 3px;
+  margin: 0;
+}
+
+/* ── Sub-heading ── */
+.quit-subtitle {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.65rem;
+  color: #888;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── Revealed word tiles ── */
+.quit-word-row {
+  display: flex;
+  gap: 6px;
+}
+
+.quit-tile {
+  width: 3.2rem;
+  height: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  color: #fff;
+  background-color: #538d4e;
+  border: 2px solid #6aaf5e;
+  border-radius: 4px;
+}
+
+/* ── Start New Game button ── */
+.quit-start-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.75rem;
+  color: #fff;
+  background-color: #538d4e;
+  border: 3px solid #fff;
+  border-radius: 6px;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background-color 0.2s, border-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.quit-start-btn:hover {
+  background-color: #6aaf5e;
+  border-color: #538d4e;
+}
+
+.quit-start-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Responsive — Tablet ── */
+@media (max-width: 768px) {
+  .quit-title {
+    font-size: 1.5rem;
+  }
+
+  .quit-tile {
+    width: 2.6rem;
+    height: 2.6rem;
+    font-size: 1rem;
+  }
+
+  .quit-start-btn {
+    font-size: 0.65rem;
+    padding: 0.8rem 1.6rem;
+  }
+}
+
+/* ── Responsive — Phone ── */
+@media (max-width: 480px) {
+  .quit-screen {
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+
+  .quit-title {
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .quit-subtitle {
+    font-size: 0.5rem;
+  }
+
+  .quit-tile {
+    width: calc((100vw - 4rem) / 5.5);
+    height: calc((100vw - 4rem) / 5.5);
+    font-size: 0.85rem;
+  }
+
+  .quit-start-btn {
+    font-size: 0.5rem;
+    padding: 0.7rem 1.2rem;
+  }
+}

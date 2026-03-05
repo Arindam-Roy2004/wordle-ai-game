@@ -7,6 +7,7 @@ import './App.css';
 import { WORDS } from './utils/words';
 import { GameBoard } from './components/GameBoard';
 import { Keyboard } from './components/Keyboard';
+import { QuitScreen } from './components/QuitScreen';
 import { playKeyPress, playDelete, playSubmit, playWin, playError } from './utils/sounds';
 import { fireConfetti } from './utils/confetti';
 
@@ -21,6 +22,7 @@ function App() {
   const [hint, setHint] = useState<string>('');
   const [hintsLeft, setHintsLeft] = useState(3);
   const [isGameFinished, setIsGameFinished] = useState(false);
+  const [hasQuit, setHasQuit] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minute timer
   const roundRef = useRef(1);
@@ -49,6 +51,7 @@ function App() {
     setHint('');
     setHintsLeft(3);
     setIsGameFinished(false);
+    setHasQuit(false);
     setTimeLeft(300); // Reset timer
     roundRef.current += 1;
     console.log("Answer:", randomWord, "| Round:", roundRef.current);
@@ -239,10 +242,14 @@ function App() {
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
+  if (hasQuit) {
+    return <QuitScreen word={rightGuessString} onNewGame={resetGame} />;
+  }
+
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>Wordle Clone</h1>
+        <h1>WORDLE</h1>
         <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
           <span className="timer-icon">⏱</span>
           <span>{formatTime(timeLeft)}</span>
@@ -272,8 +279,7 @@ function App() {
           className="hint-btn quit-btn"
           onClick={() => {
             setIsGameFinished(true);
-            toastr.info(`You quit! The right word was: "${rightGuessString}"`);
-            setHint(`Answer: ${rightGuessString}`);
+            setHasQuit(true);
           }}
           disabled={isGameFinished}
         >

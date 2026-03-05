@@ -23,9 +23,24 @@ function App() {
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minute timer
+  const [roundNumber, setRoundNumber] = useState(1);
 
   const resetGame = useCallback(() => {
-    const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
+    // Progressive difficulty: pick words from harder portions as rounds increase
+    const totalWords = WORDS.length;
+    const easyEnd = Math.floor(totalWords / 3);       // ~first 1/3 (common words)
+    const mediumEnd = Math.floor((totalWords * 2) / 3); // ~first 2/3
+
+    let poolEnd: number;
+    if (roundNumber <= 3) {
+      poolEnd = easyEnd;        // Rounds 1-3: easy, common words
+    } else if (roundNumber <= 6) {
+      poolEnd = mediumEnd;      // Rounds 4-6: medium difficulty
+    } else {
+      poolEnd = totalWords;     // Rounds 7+: full word list
+    }
+
+    const randomWord = WORDS[Math.floor(Math.random() * poolEnd)];
     setRightGuessString(randomWord);
     setGuesses(Array(NUMBER_OF_GUESSES).fill([]));
     setColors(Array(NUMBER_OF_GUESSES).fill([]));
@@ -35,8 +50,9 @@ function App() {
     setHintsLeft(3);
     setIsGameFinished(false);
     setTimeLeft(300); // Reset timer
-    console.log("Answer:", randomWord);
-  }, []);
+    setRoundNumber(prev => prev + 1);
+    console.log("Answer:", randomWord, "| Round:", roundNumber);
+  }, [roundNumber]);
 
   useEffect(() => {
     toastr.options.positionClass = 'toast-top-center';

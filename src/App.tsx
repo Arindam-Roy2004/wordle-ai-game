@@ -7,6 +7,8 @@ import './App.css';
 import { WORDS } from './utils/words';
 import { GameBoard } from './components/GameBoard';
 import { Keyboard } from './components/Keyboard';
+import { playKeyPress, playDelete, playSubmit, playWin, playError } from './utils/sounds';
+import { fireConfetti } from './utils/confetti';
 
 const NUMBER_OF_GUESSES = 6;
 
@@ -65,6 +67,7 @@ function App() {
 
     const currentGuess = [...guesses[currentGuessIndex]];
     if (currentGuess.length < 5) {
+      playKeyPress();
       currentGuess.push(key);
       const newGuesses = [...guesses];
       newGuesses[currentGuessIndex] = currentGuess;
@@ -77,6 +80,7 @@ function App() {
 
     const currentGuess = [...guesses[currentGuessIndex]];
     if (currentGuess.length > 0) {
+      playDelete();
       currentGuess.pop();
       const newGuesses = [...guesses];
       newGuesses[currentGuessIndex] = currentGuess;
@@ -89,15 +93,19 @@ function App() {
 
     const currentGuess = guesses[currentGuessIndex];
     if (currentGuess.length < 5) {
+      playError();
       toastr.error("Not enough letters");
       return;
     }
 
     const guessString = currentGuess.join('');
     if (!WORDS.includes(guessString)) {
+      playError();
       toastr.error("Word not found");
       return;
     }
+
+    playSubmit();
 
     const rightGuessCopy = rightGuessString.split('');
     const newColors = Array(5).fill('transparent');
@@ -142,10 +150,12 @@ function App() {
     setKeyboardColors(newKeyboardColors);
 
     if (guessString === rightGuessString) {
+      playWin();
+      fireConfetti();
       setTimeout(() => {
         toastr.success("You guessed right!");
         resetGame();
-      }, 1500);
+      }, 3000);
       setIsGameFinished(true);
       return;
     }

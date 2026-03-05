@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import * as toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 import 'animate.css';
@@ -23,7 +23,7 @@ function App() {
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300); // 5 minute timer
-  const [roundNumber, setRoundNumber] = useState(1);
+  const roundRef = useRef(1);
 
   const resetGame = useCallback(() => {
     // Progressive difficulty: pick words from harder portions as rounds increase
@@ -32,9 +32,9 @@ function App() {
     const mediumEnd = Math.floor((totalWords * 2) / 3); // ~first 2/3
 
     let poolEnd: number;
-    if (roundNumber <= 3) {
+    if (roundRef.current <= 3) {
       poolEnd = easyEnd;        // Rounds 1-3: easy, common words
-    } else if (roundNumber <= 6) {
+    } else if (roundRef.current <= 6) {
       poolEnd = mediumEnd;      // Rounds 4-6: medium difficulty
     } else {
       poolEnd = totalWords;     // Rounds 7+: full word list
@@ -50,9 +50,9 @@ function App() {
     setHintsLeft(3);
     setIsGameFinished(false);
     setTimeLeft(300); // Reset timer
-    setRoundNumber(prev => prev + 1);
-    console.log("Answer:", randomWord, "| Round:", roundNumber);
-  }, [roundNumber]);
+    roundRef.current += 1;
+    console.log("Answer:", randomWord, "| Round:", roundRef.current);
+  }, []);
 
   useEffect(() => {
     toastr.options.positionClass = 'toast-top-center';

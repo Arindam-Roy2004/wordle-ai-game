@@ -33,7 +33,7 @@
   border: 2px solid #555;
   letter-spacing: 1px;
   z-index: 100;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,8 +54,15 @@
 }
 
 @keyframes pulse-red {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .action-section {
@@ -74,4 +81,47 @@
 .new-game-btn:hover {
   background-color: #ff6961 !important;
   border-color: #ff3b30 !important;
+}
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .app-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-top: 0.5rem;
+  }
+
+  .timer {
+    position: static;
+    font-size: 0.7rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .action-section {
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+}
+
+/* ── Phone (≤ 480px) ── */
+@media (max-width: 480px) {
+  .app-header {
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+    padding-top: 0.25rem;
+  }
+
+  .timer {
+    font-size: 0.6rem;
+    padding: 0.4rem 0.7rem;
+    border-width: 1.5px;
+  }
+
+  .action-section {
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+  }
 }

@@ -41,7 +41,7 @@ export default async function handler(
   // Rate limiting logic
   const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
   const ipStr = Array.isArray(ip) ? ip[0] : ip;
-  
+
   if (ipStr !== 'unknown') {
     const now = Date.now();
     const limitInfo = rateLimitMap.get(ipStr);
@@ -69,13 +69,16 @@ export default async function handler(
 
   const cleanWord = word.trim();
 
-  const prompt = `
-    Give a short, creative, and family-friendly riddle-style hint for the English word: '${cleanWord}'.
-    And, use easy words that a 10-year-old can understand.
-    only return the hint without any additional text.
-    like eg: "here is a hint for the word 'apple': I am red or green, and I keep doctors away. What am I?"
-    only return the hint
-    `;
+  const systemPrompt = `You are a word-guessing hint generator for a Wordle-style game. You MUST follow these rules STRICTLY:
+
+1. NEVER reveal the target word in any form — do not write it, spell it, rhyme it with a word that gives it away, or include it as part of another word.
+2. NEVER say "the word is", "the answer is", "hint for the word", or anything that references the word directly.
+3. Give a short, creative, riddle-style hint that describes the concept, meaning, or usage of the word WITHOUT giving it away.
+4. Use simple language a 10-year-old can understand.
+5. Return ONLY the hint text — no quotes, no labels, no preamble, no extra commentary.
+6. Keep it under 2 sentences.`;
+
+  const prompt = `Give a riddle-style hint for this secret word: "${cleanWord}". Remember: DO NOT reveal the word itself anywhere in your response.`;
 
   try {
     if (!openai) {
@@ -87,11 +90,11 @@ export default async function handler(
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
-        { role: "system", content: "You are a helpful assistant that gives fun, smart, and short word hints." },
+        { role: "system", content: systemPrompt },
         { role: "user", content: prompt }
       ],
-      max_tokens: 50,
-      temperature: 0.7,
+      max_tokens: 60,
+      temperature: 0.8,
     });
 
     const hint = response.choices[0]?.message?.content?.trim() || "No hint generated.";

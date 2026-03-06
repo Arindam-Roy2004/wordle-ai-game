@@ -200,6 +200,8 @@ function App() {
   }, [guesses, colors, currentGuessIndex, rightGuessString, keyboardColors, isGameFinished, resetGame]);
 
   const onKeyPress = useCallback((key: string) => {
+    if (!selectedGenre || hasQuit) return;
+
     if (key === 'Backspace' || key === 'Del') {
       deleteLetter();
     } else if (key === 'Enter') {
@@ -210,7 +212,7 @@ function App() {
         insertKey(key.toLowerCase());
       }
     }
-  }, [insertKey, deleteLetter, checkGuess]);
+  }, [insertKey, deleteLetter, checkGuess, selectedGenre, hasQuit]);
 
   useEffect(() => {
     const handleKeyUp = (e: KeyboardEvent) => {

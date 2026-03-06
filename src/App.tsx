@@ -5,7 +5,7 @@ import 'animate.css';
 import './App.css';
 
 import { WORDS } from './utils/words';
-import { GENRE_WORDS } from './utils/genreWords';
+import { GENRE_WORDS, GENRE_LABELS } from './utils/genreWords';
 import type { Genre } from './utils/genreWords';
 import { GameBoard } from './components/GameBoard';
 import { Keyboard } from './components/Keyboard';
@@ -61,6 +61,7 @@ function App() {
     setIsGameFinished(false);
     setHasQuit(false);
     setTimeLeft(300); // Reset timer
+    toastr.clear(); // Clear any lingering toasts when restarting
     roundRef.current += 1;
     console.log("Answer:", randomWord, "| Round:", roundRef.current);
   }, [selectedGenre]);
@@ -180,8 +181,9 @@ function App() {
     if (guessString === rightGuessString) {
       playWin();
       fireConfetti();
+      toastr.success("You guessed right!");
+
       setTimeout(() => {
-        toastr.success("You guessed right!");
         resetGame();
       }, 3000);
       setIsGameFinished(true);
@@ -215,11 +217,13 @@ function App() {
   }, [insertKey, deleteLetter, checkGuess, selectedGenre, hasQuit]);
 
   useEffect(() => {
-    const handleKeyUp = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Prevent repeated key inputs if key is held down
+      if (e.repeat) return;
       onKeyPress(e.key);
     };
-    window.addEventListener('keyup', handleKeyUp);
-    return () => window.removeEventListener('keyup', handleKeyUp);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onKeyPress]);
 
   const handleGetHint = async () => {
@@ -270,6 +274,12 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <h1>WORDLE</h1>
+        {selectedGenre && GENRE_LABELS[selectedGenre] && (
+          <div className="genre-badge" title="Current Genre">
+            <span className="genre-icon">{GENRE_LABELS[selectedGenre].emoji}</span>
+            <span className="genre-name">{GENRE_LABELS[selectedGenre].label}</span>
+          </div>
+        )}
         <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
           <span className="timer-icon">⏱</span>
           <span>{formatTime(timeLeft)}</span>

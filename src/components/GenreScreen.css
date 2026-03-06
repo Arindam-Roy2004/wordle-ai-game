@@ -1,0 +1,207 @@
+/* ── Genre Selection Screen ── */
+
+.genre-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1a;
+  gap: 1.6rem;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ── Title ── */
+.genre-title {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 2rem;
+  color: #538d4e;
+  text-shadow: 2px 2px 0 #000;
+  text-align: center;
+  letter-spacing: 3px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* ── Sub-heading ── */
+.genre-subtitle {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.65rem;
+  color: #888;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ── Scrollable box wrapper ── */
+.genre-scroll-box {
+  width: 100%;
+  max-width: 360px;
+  border: 3px solid #538d4e;
+  border-radius: 10px;
+  padding: 0.6rem;
+  box-sizing: border-box;
+  background-color: rgba(83, 141, 78, 0.06);
+}
+
+/* ── Scrollable genre button list ── */
+.genre-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  overflow-y: auto;
+  /* Show roughly 4 buttons at a time */
+  max-height: 220px;
+  padding-right: 0.4rem;
+  scrollbar-width: thin;
+  scrollbar-color: #538d4e #2a2a2a;
+}
+
+.genre-buttons::-webkit-scrollbar {
+  width: 6px;
+}
+
+.genre-buttons::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+
+.genre-buttons::-webkit-scrollbar-thumb {
+  background: #538d4e;
+  border-radius: 3px;
+}
+
+.genre-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.55rem;
+  color: #fff;
+  background-color: transparent;
+  border: 2px solid #555;
+  border-radius: 6px;
+  padding: 0.75rem 1.1rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.15s;
+  flex-shrink: 0;
+}
+
+.genre-btn:hover {
+  border-color: #538d4e;
+  background-color: rgba(83, 141, 78, 0.15);
+}
+
+.genre-btn-active {
+  background-color: #538d4e;
+  border-color: #6aaf5e;
+  color: #fff;
+}
+
+.genre-btn-active:hover {
+  background-color: #6aaf5e;
+  border-color: #538d4e;
+}
+
+.genre-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── Start Game button ── */
+.genre-start-btn {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.75rem;
+  color: #fff;
+  background-color: #538d4e;
+  border: 3px solid #fff;
+  border-radius: 6px;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background-color 0.2s, border-color 0.2s;
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+}
+
+.genre-start-btn:hover {
+  background-color: #6aaf5e;
+  border-color: #538d4e;
+}
+
+.genre-start-btn:active {
+  transform: scale(0.97);
+}
+
+.genre-start-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Responsive — Tablet ── */
+@media (max-width: 768px) {
+  .genre-title {
+    font-size: 1.5rem;
+  }
+
+  .genre-scroll-box {
+    max-width: 300px;
+  }
+
+  .genre-buttons {
+    max-height: 200px;
+  }
+
+  .genre-btn {
+    font-size: 0.48rem;
+    padding: 0.65rem 0.9rem;
+  }
+
+  .genre-start-btn {
+    font-size: 0.65rem;
+    padding: 0.8rem 1.6rem;
+  }
+}
+
+/* ── Responsive — Phone ── */
+@media (max-width: 480px) {
+  .genre-screen {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .genre-title {
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .genre-subtitle {
+    font-size: 0.5rem;
+  }
+
+  .genre-scroll-box {
+    max-width: 270px;
+    border-width: 2px;
+    padding: 0.4rem;
+  }
+
+  .genre-buttons {
+    max-height: 180px;
+    gap: 0.45rem;
+  }
+
+  .genre-btn {
+    font-size: 0.4rem;
+    padding: 0.6rem 0.7rem;
+    border-width: 1.5px;
+  }
+
+  .genre-start-btn {
+    font-size: 0.5rem;
+    padding: 0.7rem 1.2rem;
+  }
+}

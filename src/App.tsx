@@ -5,15 +5,19 @@ import 'animate.css';
 import './App.css';
 
 import { WORDS } from './utils/words';
+import { GENRE_WORDS } from './utils/genreWords';
+import type { Genre } from './utils/genreWords';
 import { GameBoard } from './components/GameBoard';
 import { Keyboard } from './components/Keyboard';
 import { QuitScreen } from './components/QuitScreen';
+import { GenreScreen } from './components/GenreScreen';
 import { playKeyPress, playDelete, playSubmit, playWin, playError } from './utils/sounds';
 import { fireConfetti } from './utils/confetti';
 
 const NUMBER_OF_GUESSES = 6;
 
 function App() {
+  const [selectedGenre, setSelectedGenre] = useState<Genre | null>(null);
   const [rightGuessString, setRightGuessString] = useState<string>('');
   const [guesses, setGuesses] = useState<string[][]>(Array(NUMBER_OF_GUESSES).fill([]));
   const [colors, setColors] = useState<string[][]>(Array(NUMBER_OF_GUESSES).fill([]));
@@ -27,9 +31,13 @@ function App() {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minute timer
   const roundRef = useRef(1);
 
-  const resetGame = useCallback(() => {
+  const resetGame = useCallback((genre?: Genre) => {
+    const activeGenre = genre || selectedGenre;
+    // Use genre-specific words if a genre is selected; 'mixed' falls back to general list
+    const wordPool = (activeGenre && activeGenre !== 'mixed') ? GENRE_WORDS[activeGenre] : WORDS;
+
     // Progressive difficulty: pick words from harder portions as rounds increase
-    const totalWords = WORDS.length;
+    const totalWords = wordPool.length;
     const easyEnd = Math.floor(totalWords / 3);       // ~first 1/3 (common words)
     const mediumEnd = Math.floor((totalWords * 2) / 3); // ~first 2/3
 
@@ -42,7 +50,7 @@ function App() {
       poolEnd = totalWords;     // Rounds 7+: full word list
     }
 
-    const randomWord = WORDS[Math.floor(Math.random() * poolEnd)];
+    const randomWord = wordPool[Math.floor(Math.random() * poolEnd)];
     setRightGuessString(randomWord);
     setGuesses(Array(NUMBER_OF_GUESSES).fill([]));
     setColors(Array(NUMBER_OF_GUESSES).fill([]));
@@ -55,7 +63,7 @@ function App() {
     setTimeLeft(300); // Reset timer
     roundRef.current += 1;
     console.log("Answer:", randomWord, "| Round:", roundRef.current);
-  }, []);
+  }, [selectedGenre]);
 
   useEffect(() => {
     toastr.options.positionClass = 'toast-top-center';
@@ -118,7 +126,8 @@ function App() {
     }
 
     const guessString = currentGuess.join('');
-    if (!WORDS.includes(guessString)) {
+    const activeWordPool = (selectedGenre && selectedGenre !== 'mixed') ? GENRE_WORDS[selectedGenre] : WORDS;
+    if (!activeWordPool.includes(guessString) && !WORDS.includes(guessString)) {
       playError();
       toastr.error("Word not found");
       return;
@@ -220,7 +229,10 @@ function App() {
       const res = await fetch('/api/get_hint', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ word: rightGuessString }),
+        body: JSON.stringify({
+          word: rightGuessString,
+          hintNumber: 4 - hintsLeft
+        }),
       });
       const data = await res.json();
       if (res.ok && data.hint) {
@@ -242,8 +254,13 @@ function App() {
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
+  // Show genre selection screen if no genre is selected yet
+  if (!selectedGenre) {
+    return <GenreScreen onStart={(genre) => { setSelectedGenre(genre); resetGame(genre); }} />;
+  }
+
   if (hasQuit) {
-    return <QuitScreen word={rightGuessString} onNewGame={resetGame} />;
+    return <QuitScreen word={rightGuessString} onNewGame={() => { setSelectedGenre(null); }} />;
   }
 
   return (
@@ -287,7 +304,7 @@ function App() {
         </button>
         <button
           className="hint-btn new-game-btn"
-          onClick={resetGame}
+          onClick={() => resetGame()}
         >
           NEW GAME
         </button>

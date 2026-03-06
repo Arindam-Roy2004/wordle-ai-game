@@ -11,7 +11,7 @@ import { GameBoard } from './components/GameBoard';
 import { Keyboard } from './components/Keyboard';
 import { QuitScreen } from './components/QuitScreen';
 import { GenreScreen } from './components/GenreScreen';
-import { playKeyPress, playDelete, playSubmit, playWin, playError } from './utils/sounds';
+import { playKeyPress, playDelete, playSubmit, playWin, playError, playHint, playQuit, playStartGame } from './utils/sounds';
 import { fireConfetti } from './utils/confetti';
 
 const NUMBER_OF_GUESSES = 6;
@@ -222,6 +222,7 @@ function App() {
 
   const handleGetHint = async () => {
     if (!rightGuessString || hintsLeft <= 0) return;
+    playHint();
     setIsLoadingHint(true);
     setHint("Fetching hint...");
 
@@ -295,6 +296,7 @@ function App() {
         <button
           className="hint-btn quit-btn"
           onClick={() => {
+            playQuit();
             setIsGameFinished(true);
             setHasQuit(true);
           }}
@@ -304,7 +306,10 @@ function App() {
         </button>
         <button
           className="hint-btn new-game-btn"
-          onClick={() => resetGame()}
+          onClick={() => {
+            playStartGame();
+            resetGame();
+          }}
         >
           NEW GAME
         </button>

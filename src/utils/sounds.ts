@@ -53,3 +53,46 @@ export function playWin() {
 export function playError() {
   playTone(200, 0.2, 'sawtooth', 0.08);
 }
+
+/** Happy vintage jingle for starting the game */
+export function playStartGame() {
+  // Arpeggio using square wave for classic 8-bit sound
+  const notes = [440, 554, 659, 880]; // A4, C#5, E5, A5 (A Major)
+  notes.forEach((freq, i) => {
+    setTimeout(() => playTone(freq, 0.1, 'square', 0.1), i * 100);
+  });
+}
+
+/** Very fast, high-pitched "blip" for option selecting */
+export function playOptionChange() {
+  playTone(1200, 0.03, 'square', 0.05);
+  setTimeout(() => playTone(1600, 0.03, 'square', 0.05), 40);
+}
+
+/** Peppy double-beep for clicking Get Hint (like a generic coin-up) */
+export function playHint() {
+  playTone(987, 0.08, 'square', 0.08); // B5
+  setTimeout(() => playTone(1318, 0.15, 'square', 0.08), 100); // E6
+}
+
+/** Low descending tone for quitting */
+export function playQuit() {
+  const ctx = audioCtx();
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+
+  oscillator.type = 'sawtooth';
+
+  // Descending sweep
+  oscillator.frequency.setValueAtTime(400, ctx.currentTime);
+  oscillator.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.4);
+
+  gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+
+  oscillator.start(ctx.currentTime);
+  oscillator.stop(ctx.currentTime + 0.4);
+}

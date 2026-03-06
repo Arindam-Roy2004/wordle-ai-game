@@ -1,3 +1,5 @@
+import { useEffect, useCallback } from 'react';
+import { playStartGame } from '../utils/sounds';
 import './QuitScreen.css';
 
 interface QuitScreenProps {
@@ -6,6 +8,19 @@ interface QuitScreenProps {
 }
 
 export function QuitScreen({ word, onNewGame }: QuitScreenProps) {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      playStartGame();
+      onNewGame();
+    }
+  }, [onNewGame]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
   return (
     <div className="quit-screen">
       <h1 className="quit-title">GAME OVER</h1>
@@ -20,7 +35,10 @@ export function QuitScreen({ word, onNewGame }: QuitScreenProps) {
         ))}
       </div>
 
-      <button className="quit-start-btn" onClick={onNewGame}>
+      <button className="quit-start-btn" onClick={() => {
+        playStartGame();
+        onNewGame();
+      }}>
         ▶ START NEW GAME
       </button>
     </div>

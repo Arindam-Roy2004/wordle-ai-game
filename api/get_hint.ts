@@ -85,8 +85,6 @@ export default async function handler(
   } else {
     prompt = `Give a very specific structural or letter-based hint for the secret word: "${cleanWord}", like what letter it starts with, how many vowels it has, or another playful final clue. Remember: DO NOT reveal the exact word itself anywhere in your response.`;
   }
-  // The erroneous `}` was here. It has been removed.
-
   try {
     if (!openai) {
       return res.status(200).json({

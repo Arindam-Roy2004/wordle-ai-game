@@ -77,9 +77,14 @@ function App() {
     if (isGameFinished) return;
 
     if (timeLeft <= 0) {
+      playQuit();
       setIsGameFinished(true);
       toastr.error("Time's up! Game over!");
       toastr.info(`The right word was: "${rightGuessString}"`);
+
+      setTimeout(() => {
+        setSelectedGenre(null);
+      }, 3000);
       return;
     }
 

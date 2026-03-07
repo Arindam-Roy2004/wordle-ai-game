@@ -110,7 +110,7 @@ export default async function handler(
             contents: [{ role: "user", parts: [{ text: prompt }] }],
             systemInstruction: systemPrompt,
             generationConfig: {
-              maxOutputTokens: 60,
+              maxOutputTokens: 300,
               temperature: 0.8 + (attempt * 0.1),
             }
           });

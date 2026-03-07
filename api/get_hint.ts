@@ -80,18 +80,18 @@ export default async function handler(
 
 1. NEVER reveal the target word in any form.
 2. NEVER say "the word is", "the answer is", "hint for the word", or anything that references the word directly.
-3. Use simple language a 10-year-old can understand.
-4. Return ONLY the hint text — no quotes, no labels, no preamble, no extra commentary.
-5. Keep it under 2 sentences.
+3. BE EXTREMELY BRIEF. Give short, punchy, creative responses.
+4. Return ONLY the raw hint text — NO conversational filler (e.g. no "Here is a hint:").
+5. ABSOLUTE MAXIMUM length is 2 sentences. Max 1-2 lines. No fluff.
 6. CRITICAL: The exact letters of the secret word must NOT appear sequentially in your answer.`;
 
   let prompt = '';
   if (hintNumber === 1) {
-    prompt = `Give a normal, riddle-style hint that describes the meaning, category, or origin of this secret word: "${cleanWord}". Be creative but descriptive. Remember: DO NOT include the word itself.`;
+    prompt = `Give a very short, clever 1-sentence riddle describing the meaning or origin of: "${cleanWord}". Be extremely creative but quick. DO NOT include the word.`;
   } else if (hintNumber === 2) {
-    prompt = `Describe common situations or environments where this secret word: "${cleanWord}" is used, or give a famous setting where people use it. Be imaginative. Remember: DO NOT include the word itself.`;
+    prompt = `In 1-2 punchy sentences, describe a common situation or famous setting where: "${cleanWord}" is used. Be imaginative but brief. DO NOT include the word.`;
   } else {
-    prompt = `Give a clever hint about what this secret word: "${cleanWord}" rhymes with, or describe its letter structure (like starting/ending letters) in a playful way. Remember: DO NOT include the word itself.`;
+    prompt = `In 1 short sentence, give a clever rhyming hint or a playful structural clue (like starting/ending letters) for: "${cleanWord}". DO NOT include the word.`;
   }
   const MAX_RETRIES = 3;
   let hint = "";

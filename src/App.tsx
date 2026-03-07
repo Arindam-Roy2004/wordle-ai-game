@@ -280,18 +280,20 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <h1>WORDLE</h1>
-        {selectedGenre && GENRE_LABELS[selectedGenre] && (
-          <div className="genre-badge" title="Current Genre">
-            <span className="genre-icon">{GENRE_LABELS[selectedGenre].emoji}</span>
-            <span className="genre-name"><span className="hide-on-mobile">{GENRE_LABELS[selectedGenre].label}</span></span>
+        <div className="header-badges">
+          {selectedGenre && GENRE_LABELS[selectedGenre] && (
+            <div className="genre-badge" title="Current Genre">
+              <span className="genre-icon">{GENRE_LABELS[selectedGenre].emoji}</span>
+              <span className="genre-name"><span className="hide-on-mobile">{GENRE_LABELS[selectedGenre].label}</span></span>
+            </div>
+          )}
+          <div className="level-badge" title="Current Level">
+            LEVEL {roundRef.current}
           </div>
-        )}
-        <div className="level-badge" title="Current Level">
-          LEVEL {roundRef.current}
-        </div>
-        <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
-          <span className="timer-icon">⏱</span>
-          <span>{formatTime(timeLeft)}</span>
+          <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
+            <span className="timer-icon">⏱</span>
+            <span>{formatTime(timeLeft)}</span>
+          </div>
         </div>
       </header>
 

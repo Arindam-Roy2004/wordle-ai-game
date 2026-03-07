@@ -20,6 +20,10 @@
   margin: 0;
 }
 
+.header-badges {
+  display: contents;
+}
+
 .timer {
   position: fixed;
   top: 1.5rem;
@@ -126,20 +130,46 @@
 /* ── Tablet (≤ 768px) ── */
 @media (max-width: 768px) {
   .app-header {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
     padding-top: 0.5rem;
+    width: 100%;
+    position: relative;
+  }
 
+  .header-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    min-height: 2.5rem;
   }
 
   .timer,
   .genre-badge,
   .level-badge {
     position: static;
+    transform: none;
     font-size: 0.6rem;
     padding: 0.5rem 0.8rem;
+    margin: 0;
+  }
+
+  .genre-badge {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .timer {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .action-section {
@@ -151,17 +181,20 @@
 /* ── Phone (≤ 480px) ── */
 @media (max-width: 480px) {
   .app-header {
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 0.5rem;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
     padding-top: 0.25rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.2rem;
   }
 
   .timer,
   .genre-badge,
   .level-badge {
     font-size: 0.5rem;
-    padding: 0.4rem 0.7rem;
+    padding: 0.4rem 0.6rem;
     border-width: 1.5px;
   }
 

@@ -1,4 +1,4 @@
-// Genre-specific 5-letter word lists for Wordle
+
 
 export type Genre =
   | 'mixed'

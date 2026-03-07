@@ -15,7 +15,6 @@ export function GenreScreen({ onStart }: GenreScreenProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    // Navigate with arrow keys
     if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
       e.preventDefault();
 
@@ -33,7 +32,6 @@ export function GenreScreen({ onStart }: GenreScreenProps) {
       playOptionChange();
       setSelected(newSelected);
 
-      // Try to scroll the selected button into view
       setTimeout(() => {
         const selectedBtn = containerRef.current?.querySelector(`.genre-btn-active`);
         if (selectedBtn) {

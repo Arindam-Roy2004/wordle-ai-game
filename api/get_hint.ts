@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { OpenAI } from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -13,8 +14,14 @@ if (apiKey) {
   });
 }
 
+const geminiApiKey = process.env.GEMINI_API_KEY;
+let genAI: GoogleGenerativeAI | null = null;
+if (geminiApiKey) {
+  genAI = new GoogleGenerativeAI(geminiApiKey);
+}
+
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-const WINDOW_MS = 60 * 1000; // 1 minute
+const WINDOW_MS = 60 * 1000;
 const MAX_REQUESTS = 5;
 
 export default async function handler(
@@ -38,7 +45,7 @@ export default async function handler(
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // Rate limiting logic
+
   const ip = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown';
   const ipStr = Array.isArray(ip) ? ip[0] : ip;
 
@@ -48,7 +55,7 @@ export default async function handler(
 
     if (limitInfo) {
       if (now > limitInfo.resetTime) {
-        // Reset window
+
         rateLimitMap.set(ipStr, { count: 1, resetTime: now + WINDOW_MS });
       } else {
         if (limitInfo.count >= MAX_REQUESTS) {
@@ -71,43 +78,97 @@ export default async function handler(
 
   const systemPrompt = `You are a word-guessing hint generator for a Wordle-style game. You MUST follow these rules STRICTLY:
 
-1. NEVER reveal the target word in any form — do not write it, spell it, rhyme it with a word that gives it away, or include it as part of another word.
+1. NEVER reveal the target word in any form.
 2. NEVER say "the word is", "the answer is", "hint for the word", or anything that references the word directly.
 3. Use simple language a 10-year-old can understand.
 4. Return ONLY the hint text — no quotes, no labels, no preamble, no extra commentary.
-5. Keep it under 2 sentences.`;
+5. Keep it under 2 sentences.
+6. CRITICAL: The exact letters of the secret word must NOT appear sequentially in your answer.`;
 
   let prompt = '';
   if (hintNumber === 1) {
-    prompt = `Give a short, riddle-style hint that describes the concept, meaning, or usage of this secret word: "${cleanWord}". Remember: DO NOT reveal the word itself anywhere in your response.`;
+    prompt = `Give a normal, riddle-style hint that describes the meaning, category, or origin of this secret word: "${cleanWord}". Be creative but descriptive. Remember: DO NOT include the word itself.`;
   } else if (hintNumber === 2) {
-    prompt = `Give a playful and slightly different hint for the secret word: "${cleanWord}". For example, you can say what it rhymes with (without giving it away completely), or make a funny association. Remember: DO NOT reveal the word itself anywhere in your response.`;
+    prompt = `Describe common situations or environments where this secret word: "${cleanWord}" is used, or give a famous setting where people use it. Be imaginative. Remember: DO NOT include the word itself.`;
   } else {
-    prompt = `Give a very specific structural or letter-based hint for the secret word: "${cleanWord}", like what letter it starts with, how many vowels it has, or another playful final clue. Remember: DO NOT reveal the exact word itself anywhere in your response.`;
+    prompt = `Give a clever hint about what this secret word: "${cleanWord}" rhymes with, or describe its letter structure (like starting/ending letters) in a playful way. Remember: DO NOT include the word itself.`;
   }
-  try {
-    if (!openai) {
-      return res.status(200).json({
-        hint: "[MOCK HINT] Please add your OPENAI_API_KEY to the root .env file to enable real hints! Example hint: I am red, round, and crunchy."
-      });
+  const MAX_RETRIES = 3;
+  let hint = "";
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      let usedGemini = false;
+
+      if (genAI) {
+        try {
+          const model = genAI.getGenerativeModel({
+            model: "gemini-1.5-flash",
+          });
+
+          const result = await model.generateContent({
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            systemInstruction: systemPrompt,
+            generationConfig: {
+              maxOutputTokens: 60,
+              temperature: 0.8 + (attempt * 0.1),
+            }
+          });
+
+          hint = result.response.text().trim();
+          usedGemini = true;
+        } catch (geminiError) {
+          console.error(`Gemini API error on attempt ${attempt}:`, geminiError);
+        }
+      }
+
+      if (!usedGemini) {
+        if (!openai) {
+          return res.status(200).json({
+            hint: "[MOCK HINT] Please add your GEMINI_API_KEY or OPENAI_API_KEY to the root .env file to enable real hints! Example hint: I am red, round, and crunchy."
+          });
+        }
+
+        const response = await openai.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt }
+          ],
+          max_tokens: 60,
+          temperature: 0.8 + (attempt * 0.1),
+        });
+
+        hint = response.choices[0]?.message?.content?.trim() || "No hint generated.";
+      }
+
+
+      const normalizedHint = hint.toLowerCase().replace(/[^a-z]/g, '');
+      const normalizedWord = cleanWord.toLowerCase();
+
+      if (!hint || hint === "No hint generated.") {
+        throw new Error("Empty or default hint generated.");
+      }
+
+      if (normalizedHint.includes(normalizedWord)) {
+        console.warn(`[Attempt ${attempt}] AI hallucinated the answer in the hint. Retrying...`);
+        hint = "";
+        continue;
+      }
+
+
+      return res.status(200).json({ hint: hint });
+
+    } catch (error: any) {
+      console.error(`API error on attempt ${attempt}:`, error);
+      if (attempt === MAX_RETRIES) {
+        return res.status(500).json({ error: `API error after ${MAX_RETRIES} attempts: ${error.message} ` });
+      }
     }
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: prompt }
-      ],
-      max_tokens: 60,
-      temperature: 0.8,
-    });
-
-    const hint = response.choices[0]?.message?.content?.trim() || "No hint generated.";
-
-    return res.status(200).json({ hint: hint });
-
-  } catch (error: any) {
-    console.error("OpenAI API error:", error);
-    return res.status(500).json({ error: `OpenAI API error: ${error.message} ` });
   }
+
+
+  return res.status(200).json({
+    hint: "I'm having a hard time thinking of a hint that doesn't just give the answer away!"
+  });
 }

@@ -1,4 +1,4 @@
-// Sound effects using Web Audio API — no external files needed
+
 
 const audioCtx = () => {
   // Lazily initialize AudioContext on first user interaction
@@ -43,7 +43,7 @@ export function playSubmit() {
 
 /** Ascending chime on correct guess */
 export function playWin() {
-  const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
+  const notes = [523, 659, 784, 1047];
   notes.forEach((freq, i) => {
     setTimeout(() => playTone(freq, 0.3, 'sine', 0.15), i * 150);
   });
@@ -56,8 +56,7 @@ export function playError() {
 
 /** Happy vintage jingle for starting the game */
 export function playStartGame() {
-  // Arpeggio using square wave for classic 8-bit sound
-  const notes = [440, 554, 659, 880]; // A4, C#5, E5, A5 (A Major)
+  const notes = [440, 554, 659, 880];
   notes.forEach((freq, i) => {
     setTimeout(() => playTone(freq, 0.1, 'square', 0.1), i * 100);
   });
@@ -71,8 +70,8 @@ export function playOptionChange() {
 
 /** Peppy double-beep for clicking Get Hint (like a generic coin-up) */
 export function playHint() {
-  playTone(987, 0.08, 'square', 0.08); // B5
-  setTimeout(() => playTone(1318, 0.15, 'square', 0.08), 100); // E6
+  playTone(987, 0.08, 'square', 0.08);
+  setTimeout(() => playTone(1318, 0.15, 'square', 0.08), 100);
 }
 
 /** Low descending tone for quitting */
@@ -83,7 +82,7 @@ export function playQuit() {
 
   oscillator.type = 'sawtooth';
 
-  // Descending sweep
+
   oscillator.frequency.setValueAtTime(400, ctx.currentTime);
   oscillator.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.4);
 

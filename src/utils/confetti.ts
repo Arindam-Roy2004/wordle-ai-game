@@ -8,7 +8,6 @@ export function fireConfetti() {
   const colors = ['#538d4e', '#b59f3b', '#ffffff', '#ffcc00', '#ff6b6b'];
 
   const frame = () => {
-    // Left side burst
     confetti({
       particleCount: 3,
       angle: 60,
@@ -17,7 +16,6 @@ export function fireConfetti() {
       colors,
     });
 
-    // Right side burst
     confetti({
       particleCount: 3,
       angle: 120,
@@ -31,7 +29,6 @@ export function fireConfetti() {
     }
   };
 
-  // Initial big center burst
   confetti({
     particleCount: 100,
     spread: 100,

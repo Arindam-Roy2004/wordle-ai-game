@@ -28,26 +28,24 @@ function App() {
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [hasQuit, setHasQuit] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minute timer
+  const [timeLeft, setTimeLeft] = useState(300);
   const roundRef = useRef(1);
 
   const resetGame = useCallback((genre?: Genre) => {
     const activeGenre = genre || selectedGenre;
-    // Use genre-specific words if a genre is selected; 'mixed' falls back to general list
     const wordPool = (activeGenre && activeGenre !== 'mixed') ? GENRE_WORDS[activeGenre] : WORDS;
 
-    // Progressive difficulty: pick words from harder portions as rounds increase
     const totalWords = wordPool.length;
-    const easyEnd = Math.floor(totalWords / 3);       // ~first 1/3 (common words)
-    const mediumEnd = Math.floor((totalWords * 2) / 3); // ~first 2/3
+    const easyEnd = Math.floor(totalWords / 3);
+    const mediumEnd = Math.floor((totalWords * 2) / 3);
 
     let poolEnd: number;
     if (roundRef.current <= 3) {
-      poolEnd = easyEnd;        // Rounds 1-3: easy, common words
+      poolEnd = easyEnd;
     } else if (roundRef.current <= 6) {
-      poolEnd = mediumEnd;      // Rounds 4-6: medium difficulty
+      poolEnd = mediumEnd;
     } else {
-      poolEnd = totalWords;     // Rounds 7+: full word list
+      poolEnd = totalWords;
     }
 
     const randomWord = wordPool[Math.floor(Math.random() * poolEnd)];
@@ -60,8 +58,8 @@ function App() {
     setHintsLeft(3);
     setIsGameFinished(false);
     setHasQuit(false);
-    setTimeLeft(300); // Reset timer
-    toastr.clear(); // Clear any lingering toasts when restarting
+    setTimeLeft(300);
+    toastr.clear();
     roundRef.current += 1;
     console.log("Answer:", randomWord, "| Round:", roundRef.current);
   }, [selectedGenre]);
@@ -144,23 +142,21 @@ function App() {
     const rightGuessCopy = rightGuessString.split('');
     const newColors = Array(5).fill('transparent');
 
-    // First pass: mark greens
     for (let i = 0; i < 5; i++) {
       if (currentGuess[i] === rightGuessCopy[i]) {
-        newColors[i] = '#538d4e'; // green
-        rightGuessCopy[i] = ''; // nullify
+        newColors[i] = '#538d4e';
+        rightGuessCopy[i] = '';
       }
     }
 
-    // Second pass: mark yellows
     for (let i = 0; i < 5; i++) {
       if (newColors[i] !== '#538d4e') {
         const letterIndex = rightGuessCopy.indexOf(currentGuess[i]);
         if (letterIndex !== -1 && rightGuessCopy[letterIndex] !== '') {
-          newColors[i] = '#b59f3b'; // yellow
-          rightGuessCopy[letterIndex] = ''; // nullify
+          newColors[i] = '#b59f3b';
+          rightGuessCopy[letterIndex] = '';
         } else {
-          newColors[i] = '#3a3a3c'; // grey
+          newColors[i] = '#3a3a3c';
         }
       }
     }
@@ -169,7 +165,6 @@ function App() {
     updatedColors[currentGuessIndex] = newColors;
     setColors(updatedColors);
 
-    // Update keyboard colors
     const newKeyboardColors = { ...keyboardColors };
     for (let i = 0; i < 5; i++) {
       const letter = currentGuess[i];
@@ -223,7 +218,6 @@ function App() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Prevent repeated key inputs if key is held down
       if (e.repeat) return;
       onKeyPress(e.key);
     };
@@ -266,7 +260,6 @@ function App() {
     return `${m}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Show genre selection screen if no genre is selected yet
   if (!selectedGenre) {
     return <GenreScreen onStart={(genre) => { setSelectedGenre(genre); resetGame(genre); }} />;
   }

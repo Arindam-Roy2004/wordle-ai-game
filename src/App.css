@@ -83,6 +83,24 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
+.level-badge {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background-color: #538d4e;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 2px solid #fff;
+  color: #fff;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
 .genre-icon {
   font-size: 1.1rem;
 }
@@ -113,10 +131,12 @@
     gap: 0.5rem;
     margin-bottom: 1rem;
     padding-top: 0.5rem;
+
   }
 
   .timer,
-  .genre-badge {
+  .genre-badge,
+  .level-badge {
     position: static;
     font-size: 0.6rem;
     padding: 0.5rem 0.8rem;
@@ -138,7 +158,8 @@
   }
 
   .timer,
-  .genre-badge {
+  .genre-badge,
+  .level-badge {
     font-size: 0.5rem;
     padding: 0.4rem 0.7rem;
     border-width: 1.5px;
@@ -147,5 +168,9 @@
   .action-section {
     gap: 0.6rem;
     margin-top: 0.8rem;
+  }
+
+  .hide-on-mobile {
+    display: none;
   }
 }

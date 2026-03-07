@@ -29,9 +29,13 @@ function App() {
   const [hasQuit, setHasQuit] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300);
-  const roundRef = useRef(1);
+  const roundRef = useRef(0);
 
-  const resetGame = useCallback((genre?: Genre) => {
+  const resetGame = useCallback((genre?: Genre, isNewGame: boolean = false) => {
+    if (isNewGame) {
+      roundRef.current = 0;
+    }
+
     const activeGenre = genre || selectedGenre;
     const wordPool = (activeGenre && activeGenre !== 'mixed') ? GENRE_WORDS[activeGenre] : WORDS;
 
@@ -60,7 +64,11 @@ function App() {
     setHasQuit(false);
     setTimeLeft(300);
     toastr.clear();
-    roundRef.current += 1;
+
+    if (!isNewGame) {
+      roundRef.current += 1;
+    }
+
     console.log("Answer:", randomWord, "| Round:", roundRef.current);
   }, [selectedGenre]);
 
@@ -184,7 +192,7 @@ function App() {
       toastr.success("You guessed right!");
 
       setTimeout(() => {
-        resetGame();
+        resetGame(undefined, false); // Advance to next round within the same genre
       }, 3000);
       setIsGameFinished(true);
       return;
@@ -261,11 +269,11 @@ function App() {
   };
 
   if (!selectedGenre) {
-    return <GenreScreen onStart={(genre) => { setSelectedGenre(genre); resetGame(genre); }} />;
+    return <GenreScreen onStart={(genre) => { setSelectedGenre(genre); resetGame(genre, true); }} />;
   }
 
   if (hasQuit) {
-    return <QuitScreen word={rightGuessString} onNewGame={() => { setSelectedGenre(null); }} />;
+    return <QuitScreen word={rightGuessString} onNewGame={() => { setSelectedGenre(null); roundRef.current = 0; }} />;
   }
 
   return (
@@ -275,9 +283,12 @@ function App() {
         {selectedGenre && GENRE_LABELS[selectedGenre] && (
           <div className="genre-badge" title="Current Genre">
             <span className="genre-icon">{GENRE_LABELS[selectedGenre].emoji}</span>
-            <span className="genre-name">{GENRE_LABELS[selectedGenre].label}</span>
+            <span className="genre-name"><span className="hide-on-mobile">{GENRE_LABELS[selectedGenre].label}</span></span>
           </div>
         )}
+        <div className="level-badge" title="Current Level">
+          LEVEL {roundRef.current}
+        </div>
         <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
           <span className="timer-icon">⏱</span>
           <span>{formatTime(timeLeft)}</span>
@@ -318,7 +329,7 @@ function App() {
           className="hint-btn new-game-btn"
           onClick={() => {
             playStartGame();
-            resetGame();
+            setSelectedGenre(null); // Go back to genre select for a completely new game
           }}
         >
           NEW GAME

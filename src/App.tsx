@@ -74,7 +74,7 @@ function App() {
   }, [resetGame]);
 
   useEffect(() => {
-    if (isGameFinished) return;
+    if (isGameFinished || !selectedGenre) return;
 
     if (timeLeft <= 0) {
       playQuit();
@@ -93,7 +93,7 @@ function App() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, isGameFinished, rightGuessString]);
+  }, [timeLeft, isGameFinished, rightGuessString, selectedGenre]);
 
   const insertKey = useCallback((key: string) => {
     if (isGameFinished || currentGuessIndex >= NUMBER_OF_GUESSES) return;

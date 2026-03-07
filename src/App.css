@@ -194,8 +194,13 @@
   .genre-badge,
   .level-badge {
     font-size: 0.5rem;
-    padding: 0.4rem 0.6rem;
+    padding: 0.5rem 0.7rem;
     border-width: 1.5px;
+    box-sizing: border-box;
+  }
+
+  .genre-badge .genre-icon {
+    font-size: 1rem;
   }
 
   .action-section {

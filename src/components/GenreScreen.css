@@ -142,6 +142,46 @@
   cursor: not-allowed;
 }
 
+/* ── Responsive — Large Desktop ── */
+@media (min-width: 1024px) {
+  .genre-screen {
+    gap: 2.2rem;
+  }
+
+  .genre-title {
+    font-size: 2.8rem;
+    letter-spacing: 5px;
+  }
+
+  .genre-subtitle {
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+  }
+
+  .genre-scroll-box {
+    max-width: 520px;
+    padding: 1rem;
+    border-width: 3px;
+  }
+
+  .genre-buttons {
+    max-height: 320px;
+    gap: 0.8rem;
+  }
+
+  .genre-btn {
+    font-size: 0.75rem;
+    padding: 1rem 1.4rem;
+    border-radius: 8px;
+  }
+
+  .genre-start-btn {
+    font-size: 0.9rem;
+    padding: 1.2rem 2.6rem;
+    border-radius: 8px;
+  }
+}
+
 /* ── Responsive — Tablet ── */
 @media (max-width: 768px) {
   .genre-title {

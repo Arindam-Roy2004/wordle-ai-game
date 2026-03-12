@@ -282,12 +282,6 @@ function App() {
       <header className="app-header">
         <h1>WORDLE</h1>
         <div className="header-badges">
-          {selectedGenre && GENRE_LABELS[selectedGenre] && (
-            <div className="genre-badge" title="Current Genre">
-              <span className="genre-icon">{GENRE_LABELS[selectedGenre].emoji}</span>
-              <span className="genre-name"><span className="hide-on-mobile">{GENRE_LABELS[selectedGenre].label}</span></span>
-            </div>
-          )}
           <div className="level-badge" title="Current Level">
             LEVEL {roundRef.current}
           </div>

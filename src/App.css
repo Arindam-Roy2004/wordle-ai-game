@@ -9,81 +9,83 @@
 
 .app-header {
   width: 100%;
+  max-width: 500px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-top: 1rem;
+  padding: 1rem 0;
+  box-sizing: border-box;
 }
 
-.app-header h1 {
-  margin: 0;
+.left-controls,
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
-.header-badges {
-  display: contents;
-}
-
-.timer {
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.9rem;
-  color: #fff;
-  background-color: #222;
-  padding: 0.8rem 1rem;
+/* Base button style for header tags */
+.icon-btn {
+  background-color: #3b3b4f;
+  border: 2px solid #111;
   border-radius: 8px;
-  border: 2px solid #555;
-  letter-spacing: 1px;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  line-height: 1;
+  padding: 0;
+  width: 3.5rem;
+  height: 3.5rem;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
-.timer-icon {
-  font-family: sans-serif;
-  font-size: 1.1rem;
-  margin-top: -2px;
+.icon-btn:hover {
+  background-color: #55556f;
 }
 
-.timer-warning {
-  color: #ff3b30;
-  border-color: #ff3b30;
-  animation: pulse-red 1s infinite;
+.icon-btn:active {
+  transform: scale(0.95);
 }
 
-@keyframes pulse-red {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.level-badge {
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  display: flex;
-  align-items: center;
-  background-color: #538d4e;
-  padding: 0.6rem 1.2rem;
+.header-tag {
+  background-color: #3b3b4f;
+  border: 2px solid #111;
   border-radius: 8px;
-  border: 2px solid #fff;
   color: #fff;
-  font-family: 'Press Start 2P', cursive;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 3.5rem;
+  font-family: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.header-tag-top {
   font-size: 0.8rem;
-  z-index: 100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  font-weight: 700;
+  opacity: 0.9;
+  margin-bottom: 0.1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-tag-top-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.15rem;
+}
+
+.header-tag-bottom {
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 1px;
 }
 
 .action-section {
@@ -104,113 +106,94 @@
   border-color: #ff3b30 !important;
 }
 
+.timer-warning {
+  border-color: #ff3b30 !important;
+  color: #ff3b30 !important;
+  animation: pulse-red 1s infinite;
+}
+
+@keyframes pulse-red {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
 /* ── Large Desktop (≥ 1024px) ── */
 @media (min-width: 1024px) {
   .app-header {
-    margin-bottom: 1rem;
-    padding-top: 1rem;
-    position: relative;
-    flex-direction: column-reverse;
-    /* Reverses order so LEVEL badge is above h1 */
-    gap: 1rem;
+    padding: 1rem 0;
   }
 
-  /* Make level badge flow normally inside the flex column */
-  .level-badge {
-    font-size: 0.9rem;
-    padding: 0.6rem 1.4rem;
-    position: static;
-    transform: none;
+  .icon-btn,
+  .header-tag {
+    height: 4rem;
   }
 
-  .timer {
-    font-size: 1rem;
-    padding: 0.9rem 1.2rem;
+  .icon-btn {
+    width: 4rem;
   }
 
-  .level-badge {
-    font-size: 0.9rem;
-    padding: 0.7rem 1.4rem;
+  .header-tag {
+    width: 5rem;
   }
 
-  .action-section {
-    gap: 3.5rem;
-    margin-top: 0.5rem;
+  .header-tag-bottom {
+    font-size: 1.15rem;
   }
 }
 
 /* ── Tablet (≤ 768px) ── */
 @media (max-width: 768px) {
   .app-header {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding-top: 0.5rem;
-    width: 100%;
-    position: relative;
-  }
-
-  .header-badges {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    position: relative;
-    min-height: 2.5rem;
-  }
-
-  .timer,
-  .level-badge {
-    position: static;
-    transform: none;
-    font-size: 0.6rem;
-    padding: 0.5rem 0.8rem;
-    margin: 0;
-  }
-
-  .level-badge {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .timer {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .action-section {
-    gap: 1.5rem;
-    margin-top: 1rem;
+    padding: 1rem;
   }
 }
 
 /* ── Phone (≤ 480px) ── */
 @media (max-width: 480px) {
   .app-header {
-    gap: 0.8rem;
-    margin-bottom: 1rem;
-    padding-top: 0.25rem;
+    padding: 0.8rem 0.5rem;
   }
 
-  .app-header h1 {
-    font-size: 1.2rem;
+  .left-controls,
+  .right-controls {
+    gap: 0.4rem;
   }
 
-  .timer,
-  .level-badge {
-    font-size: 0.5rem;
-    padding: 0.5rem 0.7rem;
-    border-width: 1.5px;
-    box-sizing: border-box;
+  .icon-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 6px;
   }
 
-  .action-section {
-    gap: 0.6rem;
-    margin-top: 0.8rem;
+  .icon-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .header-tag {
+    width: 3.5rem;
+    height: 2.8rem;
+    border-radius: 6px;
+  }
+
+  .header-tag-top {
+    font-size: 0.6rem;
+    margin-bottom: 0.05rem;
+  }
+
+  .header-tag-top-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .header-tag-bottom {
+    font-size: 0.75rem;
   }
 }

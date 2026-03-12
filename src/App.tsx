@@ -11,6 +11,7 @@ import { GameBoard } from './components/GameBoard';
 import { Keyboard } from './components/Keyboard';
 import { QuitScreen } from './components/QuitScreen';
 import { GenreScreen } from './components/GenreScreen';
+import { HowToPlayModal } from './components/HowToPlayModal';
 import { playKeyPress, playDelete, playSubmit, playWin, playError, playHint, playQuit, playStartGame } from './utils/sounds';
 import { fireConfetti } from './utils/confetti';
 
@@ -29,6 +30,7 @@ function App() {
   const [hasQuit, setHasQuit] = useState(false);
   const [isLoadingHint, setIsLoadingHint] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300);
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
   const roundRef = useRef(0);
 
   const resetGame = useCallback((genre?: Genre, isNewGame: boolean = false) => {
@@ -280,15 +282,30 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header">
-        <h1>WORDLE</h1>
-        <div className="header-badges">
-          <div className="level-badge" title="Current Level">
-            LEVEL {roundRef.current}
+        <div className="left-controls">
+          <div className={`header-tag ${timeLeft <= 60 ? 'timer-warning' : ''}`} title="Current Time">
+            <div className="header-tag-top-icon">
+              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div className="header-tag-bottom">{formatTime(timeLeft)}</div>
           </div>
-          <div className={`timer ${timeLeft <= 60 ? 'timer-warning' : ''}`}>
-            <span className="timer-icon">⏱</span>
-            <span>{formatTime(timeLeft)}</span>
+          <div className="header-tag" title="Current Level">
+            <div className="header-tag-top">LVL</div>
+            <div className="header-tag-bottom">{roundRef.current}</div>
           </div>
+        </div>
+
+        <div className="right-controls">
+          <button className="icon-btn" title="Help" onClick={() => setShowHowToPlay(true)}>
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </button>
         </div>
       </header>
 
@@ -333,6 +350,10 @@ function App() {
         </button>
       </div>
       {hint && <p className="hint-text">{hint}</p>}
+
+      {showHowToPlay && (
+        <HowToPlayModal onClose={() => setShowHowToPlay(false)} />
+      )}
     </div>
   );
 }

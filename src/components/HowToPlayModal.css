@@ -1,0 +1,161 @@
+.htp-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.htp-modal {
+  background-color: #e5e5e5;
+  color: #000;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 23px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+}
+
+.htp-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.htp-header h2 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.htp-close-btn {
+  position: absolute;
+  right: -1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.htp-close-btn:hover {
+  color: #000;
+}
+
+.htp-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: left;
+}
+
+.htp-content p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.htp-divider {
+  border: none;
+  border-bottom: 1px solid #777;
+  width: 100%;
+  margin: 1.2rem 0;
+}
+
+.htp-examples-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0 0 1rem 0;
+}
+
+.htp-example {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.htp-word {
+  display: flex;
+  gap: 4px;
+}
+
+.htp-tile {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border: 2px solid #555;
+  background-color: transparent;
+  color: #000;
+}
+
+.htp-correct {
+  background-color: #538d4e;
+  border-color: #538d4e;
+  color: #fff;
+}
+
+.htp-present {
+  background-color: #b59f3b;
+  border-color: #b59f3b;
+  color: #fff;
+}
+
+.htp-absent {
+  background-color: #3a3a3c;
+  border-color: #3a3a3c;
+  color: #fff;
+}
+
+.htp-footer-text {
+  font-size: 1rem !important;
+  margin-top: 0.5rem !important;
+}
+
+@media (max-width: 480px) {
+  .htp-modal {
+    padding: 1rem 1.2rem;
+  }
+
+  .htp-content p {
+    font-size: 0.9rem;
+  }
+
+  .htp-tile {
+    width: 38px;
+    height: 38px;
+    font-size: 1.4rem;
+  }
+}

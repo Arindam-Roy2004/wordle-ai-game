@@ -210,38 +210,43 @@
 /* ── Responsive — Phone ── */
 @media (max-width: 480px) {
   .genre-screen {
-    gap: 1rem;
+    gap: 1.2rem;
     padding: 1rem;
   }
 
   .genre-title {
-    font-size: 1rem;
+    font-size: 1.4rem;
     letter-spacing: 2px;
   }
 
   .genre-subtitle {
-    font-size: 0.5rem;
+    font-size: 0.6rem;
   }
 
   .genre-scroll-box {
-    max-width: 270px;
+    max-width: 90%;
     border-width: 2px;
-    padding: 0.4rem;
+    padding: 0.6rem;
   }
 
   .genre-buttons {
-    max-height: 180px;
-    gap: 0.45rem;
+    max-height: 240px;
+    gap: 0.5rem;
   }
 
   .genre-btn {
-    font-size: 0.4rem;
-    padding: 0.6rem 0.7rem;
-    border-width: 1.5px;
+    font-size: 0.65rem;
+    padding: 0.8rem 1rem;
+    border-width: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
   }
 
   .genre-start-btn {
-    font-size: 0.5rem;
-    padding: 0.7rem 1.2rem;
+    font-size: 0.6rem;
+    padding: 0.9rem 1.4rem;
+    margin-top: 0.5rem;
   }
 }

@@ -88,7 +88,7 @@
 }
 
 .level-badge {
-  position: fixed;
+  position: absolute;
   top: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
@@ -125,6 +125,50 @@
 .new-game-btn:hover {
   background-color: #ff6961 !important;
   border-color: #ff3b30 !important;
+}
+
+/* ── Large Desktop (≥ 1024px) ── */
+@media (min-width: 1024px) {
+  .app-header {
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+    position: relative;
+    flex-direction: column-reverse;
+    /* Reverses order so LEVEL badge is above h1 */
+    gap: 1rem;
+  }
+
+  /* Make level badge flow normally inside the flex column */
+  .level-badge {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.4rem;
+    position: static;
+    transform: none;
+  }
+
+  .timer {
+    font-size: 1rem;
+    padding: 0.9rem 1.2rem;
+  }
+
+  .genre-badge {
+    font-size: 0.8rem;
+    padding: 0.7rem 1.2rem;
+  }
+
+  .genre-icon {
+    font-size: 1.3rem;
+  }
+
+  .level-badge {
+    font-size: 0.9rem;
+    padding: 0.7rem 1.4rem;
+  }
+
+  .action-section {
+    gap: 3.5rem;
+    margin-top: 0.5rem;
+  }
 }
 
 /* ── Tablet (≤ 768px) ── */

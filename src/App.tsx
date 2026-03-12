@@ -245,7 +245,8 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           word: rightGuessString,
-          hintNumber: 4 - hintsLeft
+          hintNumber: 4 - hintsLeft,
+          genre: selectedGenre ? GENRE_LABELS[selectedGenre].label : 'Mixed'
         }),
       });
       const data = await res.json();
@@ -314,7 +315,7 @@ function App() {
           onClick={handleGetHint}
           disabled={isLoadingHint || isGameFinished || hintsLeft <= 0}
         >
-          {isLoadingHint ? 'WAIT...' : `GET HINT (${hintsLeft})`}
+          {isLoadingHint ? 'WAIT...' : hintsLeft === 3 ? '💡 CLUE (3)' : hintsLeft === 2 ? '🔗 RELATED (2)' : '🧩 RIDDLE (1)'}
         </button>
         <button
           className="hint-btn quit-btn"

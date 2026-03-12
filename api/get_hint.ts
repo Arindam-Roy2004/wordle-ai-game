@@ -68,30 +68,35 @@ export default async function handler(
     }
   }
 
-  const { word, hintNumber = 1 } = req.body;
+  const { word, hintNumber = 1, genre = '' } = req.body;
 
   if (!word || typeof word !== 'string' || word.trim() === '') {
     return res.status(400).json({ error: "Word is required." });
   }
 
   const cleanWord = word.trim();
+  const genreContext = genre ? `The word belongs to the "${genre}" category. Use this context to make your hint more relevant.` : '';
 
-  const systemPrompt = `You are a word-guessing hint generator for a Wordle-style game. You MUST follow these rules STRICTLY:
+  const systemPrompt = `You are a word-guessing hint generator for a Wordle-style game. ${genreContext}
 
+You MUST follow these rules STRICTLY:
 1. NEVER reveal the target word in any form.
 2. NEVER say "the word is", "the answer is", "hint for the word", or anything that references the word directly.
 3. BE EXTREMELY BRIEF. Give short, punchy, creative responses.
-4. Return ONLY the raw hint text — NO conversational filler (e.g. no "Here is a hint:").
+4. Return ONLY the raw hint text — NO conversational filler (e.g. no "Here is a hint:", "Sure!", etc).
 5. ABSOLUTE MAXIMUM length is 2 sentences. Max 1-2 lines. No fluff.
 6. CRITICAL: The exact letters of the secret word must NOT appear sequentially in your answer.`;
 
   let prompt = '';
   if (hintNumber === 1) {
-    prompt = `Give a very short, clever 1-sentence riddle describing the meaning or origin of: "${cleanWord}". Be extremely creative but quick. DO NOT include the word.`;
+    // Level 1: Normal, vague genre-aware clue
+    prompt = `Give a short, vague 1-sentence clue about the meaning or typical use of the word "${cleanWord}"${genre ? ` within the context of ${genre}` : ''}. Be creative but keep it general enough to not give it away. DO NOT include the word itself.`;
   } else if (hintNumber === 2) {
-    prompt = `In 1-2 punchy sentences, describe a common situation or famous setting where: "${cleanWord}" is used. Be imaginative but brief. DO NOT include the word.`;
+    // Level 2: Synonyms, associations, related words
+    prompt = `For the word "${cleanWord}"${genre ? ` (in the context of ${genre})` : ''}, provide 2-3 synonyms, closely related words, or strong associations as a short comma-separated list. DO NOT include the actual word. Keep it to one line.`;
   } else {
-    prompt = `In 1 short sentence, give a clever rhyming hint or a playful structural clue (like starting/ending letters) for: "${cleanWord}". DO NOT include the word.`;
+    // Level 3: Riddle that reveals one important letter
+    prompt = `Write a 1-sentence riddle about the word "${cleanWord}" that cleverly hints at one important letter of the word (like its starting letter or a distinctive letter). Frame it as a fun puzzle. DO NOT reveal the full word itself.`;
   }
   const MAX_RETRIES = 3;
   let hint = "";

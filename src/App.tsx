@@ -309,47 +309,53 @@ function App() {
         </div>
       </header>
 
-      <GameBoard
-        guesses={guesses}
-        colors={colors}
-        currentGuessIndex={currentGuessIndex}
-      />
+      <main className="game-layout">
+        <div className="game-content">
+          <GameBoard
+            guesses={guesses}
+            colors={colors}
+            currentGuessIndex={currentGuessIndex}
+          />
 
-      <Keyboard
-        keyboardColors={keyboardColors}
-        onKeyPress={onKeyPress}
-      />
+          <Keyboard
+            keyboardColors={keyboardColors}
+            onKeyPress={onKeyPress}
+          />
 
-      <div className="action-section">
-        <button
-          className="hint-btn"
-          onClick={handleGetHint}
-          disabled={isLoadingHint || isGameFinished || hintsLeft <= 0}
-        >
-          {isLoadingHint ? 'WAIT...' : hintsLeft === 3 ? '💡 CLUE (3)' : hintsLeft === 2 ? '🔗 RELATED (2)' : '🧩 RIDDLE (1)'}
-        </button>
-        <button
-          className="hint-btn quit-btn"
-          onClick={() => {
-            playQuit();
-            setIsGameFinished(true);
-            setHasQuit(true);
-          }}
-          disabled={isGameFinished}
-        >
-          QUIT
-        </button>
-        <button
-          className="hint-btn new-game-btn"
-          onClick={() => {
-            playStartGame();
-            setSelectedGenre(null); // Go back to genre select for a completely new game
-          }}
-        >
-          NEW GAME
-        </button>
-      </div>
-      {hint && <p className="hint-text">{hint}</p>}
+          <div className="action-section">
+            <button
+              className="hint-btn"
+              onClick={handleGetHint}
+              disabled={isLoadingHint || isGameFinished || hintsLeft <= 0}
+            >
+              {isLoadingHint ? 'WAIT...' : hintsLeft === 3 ? '💡 CLUE (3)' : hintsLeft === 2 ? '🔗 RELATED (2)' : '🧩 RIDDLE (1)'}
+            </button>
+            <button
+              className="hint-btn quit-btn"
+              onClick={() => {
+                playQuit();
+                setIsGameFinished(true);
+                setHasQuit(true);
+              }}
+              disabled={isGameFinished}
+            >
+              QUIT
+            </button>
+            <button
+              className="hint-btn new-game-btn"
+              onClick={() => {
+                playStartGame();
+                setSelectedGenre(null); // Go back to genre select for a completely new game
+              }}
+            >
+              NEW GAME
+            </button>
+          </div>
+          {hint && <p className="hint-text">{hint}</p>}
+        </div>
+      </main>
+
+      <footer className="app-footer">Made by Arindam</footer>
 
       {showHowToPlay && (
         <HowToPlayModal onClose={() => setShowHowToPlay(false)} />

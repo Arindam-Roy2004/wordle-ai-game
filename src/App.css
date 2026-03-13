@@ -5,16 +5,36 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  flex: 1;
+  min-height: 100%;
 }
 
 .app-header {
   width: 100%;
-  max-width: 500px;
+  max-width: 560px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
+  padding: 1rem 0 0.75rem;
   box-sizing: border-box;
+}
+
+.game-layout {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0 1rem;
+  box-sizing: border-box;
+}
+
+.game-content {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .left-controls,
@@ -96,6 +116,20 @@
   margin-top: 1.5rem;
 }
 
+.app-footer {
+  width: 100%;
+  max-width: 560px;
+  margin-top: auto;
+  padding: 0.75rem 0 0.25rem;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 0.55rem;
+  color: #888;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
 .new-game-btn {
   background-color: #ff3b30 !important;
   color: #fff !important;
@@ -127,7 +161,17 @@
 /* ── Large Desktop (≥ 1024px) ── */
 @media (min-width: 1024px) {
   .app-header {
-    padding: 1rem 0;
+    max-width: 620px;
+    padding: 1.25rem 0 0.75rem;
+  }
+
+  .game-content,
+  .app-footer {
+    max-width: 620px;
+  }
+
+  .game-layout {
+    padding: 0.25rem 0 1rem;
   }
 
   .icon-btn,
@@ -154,6 +198,15 @@
     padding: 1rem;
   }
 
+  .game-layout {
+    padding: 0.5rem 0 1rem;
+  }
+
+  .game-content,
+  .app-footer {
+    max-width: 500px;
+  }
+
   .action-section {
     width: 100%;
     max-width: 500px;
@@ -172,6 +225,16 @@
 @media (max-width: 480px) {
   .app-header {
     padding: 0.8rem 0.5rem;
+  }
+
+  .game-layout {
+    align-items: flex-start;
+    padding: 0.2rem 0 0.8rem;
+  }
+
+  .game-content,
+  .app-footer {
+    max-width: 100%;
   }
 
   .left-controls,
@@ -214,5 +277,10 @@
     grid-template-columns: 1fr;
     gap: 0.6rem;
     margin-top: 1rem;
+  }
+
+  .app-footer {
+    font-size: 0.45rem;
+    padding: 0.6rem 0 0.2rem;
   }
 }

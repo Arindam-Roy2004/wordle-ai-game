@@ -15,11 +15,12 @@ body {
 
 #root {
   width: 100%;
-  max-width: 600px;
+  max-width: 680px;
   min-height: 100vh;
   margin: 0 auto;
   padding: 1rem;
   box-sizing: border-box;
+  display: flex;
 }
 
 h1 {

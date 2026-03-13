@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './HowToPlayModal.css';
 
 interface Props {
@@ -6,6 +6,15 @@ interface Props {
 }
 
 export const HowToPlayModal: React.FC<Props> = ({ onClose }) => {
+  useEffect(() => {
+    // Disable body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+    return () => {
+      // Re-enable body scrolling when modal is closed
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   return (
     <div className="htp-overlay" onClick={onClose}>
       <div className="htp-modal" onClick={(e) => e.stopPropagation()}>

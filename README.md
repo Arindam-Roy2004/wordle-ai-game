@@ -27,7 +27,7 @@ not just random words — pick a genre that fits your vibe:
 
 ### 🧠 AI-powered hints
 - 3 hints per game, each one gives a different type of clue (riddle, usage example, rhyme)
-- powered by google gemini / openai so the hints are actually clever and not just "it starts with S"
+- powered by google gemini so the hints are actually clever and not just "it starts with S"
 - smart enough to never accidentally reveal the answer
 
 ### 🎮 gameplay

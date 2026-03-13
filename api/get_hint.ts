@@ -1,18 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { OpenAI } from 'openai';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-
-const apiKey = process.env.OPENAI_API_KEY;
-
-let openai: OpenAI | null = null;
-if (apiKey) {
-  openai = new OpenAI({
-    apiKey: apiKey,
-  });
-}
 
 const geminiApiKey = process.env.GEMINI_API_KEY;
 let genAI: GoogleGenerativeAI | null = null;
@@ -103,49 +93,26 @@ You MUST follow these rules STRICTLY:
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      let usedGemini = false;
-
-      if (genAI) {
-        try {
-          const model = genAI.getGenerativeModel({
-            model: "gemini-3-flash-preview",
-          });
-
-          const result = await model.generateContent({
-            contents: [{ role: "user", parts: [{ text: prompt }] }],
-            systemInstruction: systemPrompt,
-            generationConfig: {
-              maxOutputTokens: 300,
-              temperature: 0.8 + (attempt * 0.1),
-            }
-          });
-
-          hint = result.response.text().trim();
-          usedGemini = true;
-        } catch (geminiError) {
-          console.error(`Gemini API error on attempt ${attempt}:`, geminiError);
-        }
-      }
-
-      if (!usedGemini) {
-        if (!openai) {
-          return res.status(200).json({
-            hint: "[MOCK HINT] Please add your GEMINI_API_KEY or OPENAI_API_KEY to the root .env file to enable real hints! Example hint: I am red, round, and crunchy."
-          });
-        }
-
-        const response = await openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ],
-          max_tokens: 60,
-          temperature: 0.8 + (attempt * 0.1),
+      if (!genAI) {
+        return res.status(200).json({
+          hint: "[MOCK HINT] Please add your GEMINI_API_KEY to the root .env file to enable real hints! Example hint: I am red, round, and crunchy."
         });
-
-        hint = response.choices[0]?.message?.content?.trim() || "No hint generated.";
       }
+
+      const model = genAI.getGenerativeModel({
+        model: "gemini-2.5-flash",
+      });
+
+      const result = await model.generateContent({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        systemInstruction: systemPrompt,
+        generationConfig: {
+          maxOutputTokens: 300,
+          temperature: 0.8 + (attempt * 0.1),
+        }
+      });
+
+      hint = result.response.text().trim();
 
 
       const normalizedHint = hint.toLowerCase().replace(/[^a-z]/g, '');

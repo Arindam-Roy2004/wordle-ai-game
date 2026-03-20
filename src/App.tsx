@@ -12,6 +12,7 @@ import { Keyboard } from './components/Keyboard';
 import { QuitScreen } from './components/QuitScreen';
 import { GenreScreen } from './components/GenreScreen';
 import { HowToPlayModal } from './components/HowToPlayModal';
+import { TimerDisplay, TimerIcon, TimerRoot } from './components/ui/Timer';
 import { playKeyPress, playDelete, playSubmit, playWin, playError, playHint, playQuit, playStartGame } from './utils/sounds';
 import { fireConfetti } from './utils/confetti';
 
@@ -283,15 +284,16 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <div className="left-controls">
-          <div className={`header-tag ${timeLeft <= 60 ? 'timer-warning' : ''}`} title="Current Time">
-            <div className="header-tag-top-icon">
-              <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-            </div>
-            <div className="header-tag-bottom">{formatTime(timeLeft)}</div>
-          </div>
+          <TimerRoot
+            title="Round Timer"
+            loading={!isGameFinished}
+            warning={timeLeft <= 60}
+            variant={timeLeft <= 60 ? 'destructive' : 'outline'}
+            size="lg"
+          >
+            <TimerIcon size="lg" loading={!isGameFinished} warning={timeLeft <= 60} />
+            <TimerDisplay size="lg" time={formatTime(timeLeft)} />
+          </TimerRoot>
           <div className="header-tag" title="Current Level">
             <div className="header-tag-top">LVL</div>
             <div className="header-tag-bottom">{roundRef.current}</div>

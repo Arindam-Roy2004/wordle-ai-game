@@ -1,0 +1,159 @@
+.retro-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 6.75rem;
+  height: 3.5rem;
+  padding: 0 0.85rem;
+  border: 2px solid #111;
+  border-radius: 999px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.retro-timer--default {
+  background: #3b3b4f;
+  color: #fff;
+}
+
+.retro-timer--outline {
+  background: #3b3b4f;
+  border-color: #5e6286;
+  color: #fff;
+}
+
+.retro-timer--ghost {
+  background: transparent;
+  border-color: #3b3b4f;
+  color: #fff;
+}
+
+.retro-timer--destructive {
+  background: #3b3b4f;
+  border-color: #ff3b30;
+  color: #ffaea9;
+}
+
+.retro-timer--warning {
+  animation: timer-flicker 1s steps(2, end) infinite;
+}
+
+.retro-timer__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.retro-timer__icon--sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.retro-timer__icon--md {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.retro-timer__icon--lg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.retro-timer__icon-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.retro-timer__icon-hands {
+  transform-origin: 12px 12px;
+}
+
+.retro-timer__icon--loading .retro-timer__icon-hands {
+  animation: timer-spin 1s linear infinite;
+}
+
+.retro-timer__display {
+  display: inline-flex;
+  align-items: center;
+}
+
+.retro-timer__time {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.retro-timer--sm {
+  min-width: 5.8rem;
+  height: 2.8rem;
+  padding: 0 0.7rem;
+}
+
+.retro-timer--sm .retro-timer__time {
+  font-size: 0.85rem;
+}
+
+.retro-timer--lg {
+  min-width: 7.75rem;
+  height: 4rem;
+  padding: 0 1rem;
+}
+
+.retro-timer--lg .retro-timer__time {
+  font-size: 1.15rem;
+}
+
+@keyframes timer-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes timer-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .retro-timer--warning,
+  .retro-timer__icon--loading .retro-timer__icon-hands {
+    animation: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .retro-timer--md {
+    height: 4rem;
+  }
+
+  .retro-timer--md .retro-timer__time {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .retro-timer--md {
+    min-width: 5.85rem;
+    height: 2.8rem;
+    padding: 0 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .retro-timer--md .retro-timer__time {
+    font-size: 0.78rem;
+  }
+}
